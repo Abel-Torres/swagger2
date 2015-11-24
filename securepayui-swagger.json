@@ -1,7 +1,7 @@
 {
   "swagger" : "2.0",
   "info" : {
-    "description" : "Documentation for Secure Pay and PAM UI",
+    "description" : "(DRAFT)Documentation for Secure Pay and PAM UI",
     "version" : "v1",
     "title" : "Swagger for Secure Pay and PAM UI"
   },

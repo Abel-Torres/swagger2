@@ -3,7 +3,7 @@
   "info" : {
     "description" : "(DRAFT)Documentation for Secure Pay and PAM UI",
     "version" : "v1",
-    "title" : "xxxSwagger for Secure Pay and PAM UI"
+    "title" : "Swagger for Secure Pay and PAM UI"
   },
   "tags" : [ {
     "name" : "cancel"

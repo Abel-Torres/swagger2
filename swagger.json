@@ -1,0 +1,210 @@
+{
+  "swagger" : "2.0",
+  "info" : {
+    "description" : "Documentation for Secure Pay and PAM UI",
+    "version" : "v1",
+    "title" : "Swagger for Secure Pay and PAM UI"
+  },
+  "tags" : [ {
+    "name" : "cancel",
+    "description" : "Cancel an order."
+  }, {
+    "name" : "pmm",
+    "description" : "Secure Pay UI: PaymentMethod"
+  }, {
+    "name" : "purchase",
+    "description" : "Secure Pay UI: Purchase"
+  }, {
+    "name" : "securepaymentapi",
+    "description" : "Secure Pay UI: Payment Backend API"
+  } ],
+  "paths" : {
+    "/cancel" : {
+      "post" : {
+        "tags" : [ "cancel" ],
+        "summary" : "Cancel order",
+        "description" : "The cancellation endpoint is a handshake API to initiate the cancellation flow. This interface establishes a session with the server and redirects the user to anauthentication service before continuing.",
+        "operationId" : "cancelOrder",
+        "consumes" : [ "application/json" ],
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "name" : "X-HP-Client-Id",
+          "in" : "header",
+          "required" : false,
+          "type" : "string",
+          "default" : ""
+        }, {
+          "name" : "Authorization",
+          "in" : "header",
+          "required" : false,
+          "type" : "string",
+          "default" : ""
+        }, {
+          "in" : "body",
+          "name" : "body",
+          "required" : false,
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "successful operation",
+            "schema" : {
+              "type" : "string"
+            }
+          }
+        }
+      }
+    },
+    "/pmm/init" : {
+      "get" : {
+        "tags" : [ "pmm" ],
+        "summary" : "Extract token",
+        "description" : "Extract token",
+        "operationId" : "extractToken",
+        "parameters" : [ {
+          "name" : "user-agent",
+          "in" : "header",
+          "required" : true,
+          "type" : "string",
+          "default" : ""
+        }, {
+          "name" : "code",
+          "in" : "query",
+          "required" : false,
+          "type" : "string"
+        }, {
+          "name" : "state",
+          "in" : "query",
+          "required" : true,
+          "type" : "string"
+        }, {
+          "name" : "error",
+          "in" : "query",
+          "required" : false,
+          "type" : "string"
+        } ],
+        "responses" : {
+          "default" : {
+            "description" : "successful operation"
+          }
+        }
+      }
+    },
+    "/purchase" : {
+      "post" : {
+        "tags" : [ "purchase" ],
+        "summary" : "Initiate a purchase",
+        "description" : "Here is a high-level view of the purchase process.1.The user validates their credential via an authentication service (HP Web ID or third party).2.The user is presented with a purchase confirmation screen.3.The user may optionally manage their payment methods.4.Once the user confirms or aborts the purchase, the confirmation screen automatically takes the user back to the caller.",
+        "operationId" : "purchase",
+        "consumes" : [ "application/json" ],
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "name" : "X-HP-Client-Id",
+          "in" : "header",
+          "required" : false,
+          "type" : "string",
+          "default" : ""
+        }, {
+          "name" : "Authorization",
+          "in" : "header",
+          "required" : false,
+          "type" : "string",
+          "default" : ""
+        }, {
+          "in" : "body",
+          "name" : "body",
+          "required" : false,
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "successful operation",
+            "schema" : {
+              "type" : "string"
+            }
+          }
+        }
+      }
+    },
+    "/securepaymentapi/createorder" : {
+      "post" : {
+        "tags" : [ "securepaymentapi" ],
+        "summary" : "Create Order",
+        "description" : "Create an Unfinished Order as per the Zone1 Payload and with the \"Authorozation\" such as Token etc.",
+        "operationId" : "createorder",
+        "consumes" : [ "application/json" ],
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "name" : "X-HP-Client-Id",
+          "in" : "header",
+          "required" : false,
+          "type" : "string",
+          "default" : ""
+        }, {
+          "name" : "Authorization",
+          "in" : "header",
+          "required" : true,
+          "type" : "string",
+          "default" : ""
+        }, {
+          "in" : "body",
+          "name" : "body",
+          "required" : false,
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "successful operation",
+            "schema" : {
+              "type" : "string"
+            }
+          }
+        }
+      }
+    },
+    "/securepaymentapi/holdauth" : {
+      "post" : {
+        "tags" : [ "securepaymentapi" ],
+        "summary" : "hold Authorization",
+        "description" : "Hold Authorization Notes",
+        "operationId" : "holdAuthorization",
+        "consumes" : [ "application/json" ],
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "name" : "X-HP-Client-Id",
+          "in" : "header",
+          "required" : true,
+          "type" : "string",
+          "default" : ""
+        }, {
+          "name" : "Authorization",
+          "in" : "header",
+          "required" : true,
+          "type" : "string",
+          "default" : ""
+        }, {
+          "in" : "body",
+          "name" : "body",
+          "required" : false,
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "successful operation",
+            "schema" : {
+              "type" : "string"
+            }
+          }
+        }
+      }
+    }
+  }
+}

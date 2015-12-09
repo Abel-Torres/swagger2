@@ -1,29 +1,45 @@
 {
   "swagger" : "2.0",
   "info" : {
-    "description" : "(DRAFT)Documentation for Secure Pay and PAM UI",
+    "description" : "Documentation for Secure Pay and PAM UI",
     "version" : "v1",
     "title" : "Swagger for Secure Pay and PAM UI"
   },
   "tags" : [ {
-    "name" : "cancel"
+    "name" : "cancel",
+    "description" : "Secure Pay UI: Cancel"
   }, {
-    "name" : "purchase"
+    "name" : "pmm",
+    "description" : "Secure Pay UI: PaymentMethod"
   }, {
-    "name" : "securepaymentapi"
+    "name" : "purchase",
+    "description" : "Secure Pay UI: Purchase"
   }, {
-    "name" : "pmm"
+    "name" : "securepaymentapi",
+    "description" : "Secure Pay UI: Payment Backend API"
   } ],
   "paths" : {
     "/cancel" : {
       "post" : {
         "tags" : [ "cancel" ],
         "summary" : "Cancel order",
-        "description" : "Sample headers: Content-Type: application/json\nX-HP-Client-Id: gcc_browser_client\nAuthorization: bearer 0/GlBG9SpDSQSQRvUqQ0kE3w;\nSample payload: {\"redirect\": \"\",\n \"locale\": \"en_US\",\n \"idProvider\": \"phoenix\",\n \"authOwner\": \"\",\n \"authURL\":\"\",\n \"orderId\" : \"dev-101-10000012-100003\",\n \"catalogId\" : \"7d047abcc052475db3a8e4368b104d10\",\n \"productId\" : \"ec307666-ebe6-4b33-8e22-b7e9da1904d5\",\n \"sku\" : \"subscription_0.99_USD_US_N_1_years_1_months_30_minutes\"\n}",
+        "description" : "The cancellation endpoint is a handshake API to initiate the cancellation flow. This interface establishes a session with the server and redirects the user to anauthentication service before continuing.",
         "operationId" : "cancelOrder",
         "consumes" : [ "application/json" ],
         "produces" : [ "application/json" ],
         "parameters" : [ {
+          "name" : "X-HP-Client-Id",
+          "in" : "header",
+          "required" : false,
+          "type" : "string",
+          "default" : ""
+        }, {
+          "name" : "Authorization",
+          "in" : "header",
+          "required" : false,
+          "type" : "string",
+          "default" : ""
+        }, {
           "in" : "body",
           "name" : "body",
           "required" : false,
@@ -33,7 +49,7 @@
         } ],
         "responses" : {
           "200" : {
-            "description" : "Successful operation",
+            "description" : "successful operation",
             "schema" : {
               "type" : "string"
             }
@@ -48,6 +64,12 @@
         "description" : "Extract token",
         "operationId" : "extractToken",
         "parameters" : [ {
+          "name" : "user-agent",
+          "in" : "header",
+          "required" : true,
+          "type" : "string",
+          "default" : ""
+        }, {
           "name" : "code",
           "in" : "query",
           "required" : false,
@@ -65,7 +87,7 @@
         } ],
         "responses" : {
           "default" : {
-            "description" : "Successful operation"
+            "description" : "successful operation"
           }
         }
       }
@@ -74,11 +96,23 @@
       "post" : {
         "tags" : [ "purchase" ],
         "summary" : "Initiate a purchase",
-        "description" : "Sample headers: Content-Type: application/json\nX-HP-Client-Id: gcc_browser_client\nAuthorization: bearer 0/GlBG9SpDSQSQRvUqQ0kE3w;\nSample payload: {\"currency\":\"USD\",\n \"idProvider\":\"phoenix\",\n \"authOwner\":\"\",\n \"authURL\":\"\",\n \"redirect\": \"\",\n \"refreshTimer\": 3000,\n \"locale\": \"en_US\",\n \"products\": [{\n   \"type\": \"ONETIME\",\n   \"productId\": \"126-126-126-126-126-onetime\",\n   \"catalogId\": \"952e06c1-14e3-11e3-bd11-22000a93d5cc\",\n   \"sku\": \"OTPP377845\",\n   \"version\": \"1.0.0\",\n   \"quantity\": \"1\",\n   \"price\": \"4.99\"\n }]\n}",
+        "description" : "Here is a high-level view of the purchase process.1.The user validates their credential via an authentication service (HP Web ID or third party).2.The user is presented with a purchase confirmation screen.3.The user may optionally manage their payment methods.4.Once the user confirms or aborts the purchase, the confirmation screen automatically takes the user back to the caller.",
         "operationId" : "purchase",
         "consumes" : [ "application/json" ],
         "produces" : [ "application/json" ],
         "parameters" : [ {
+          "name" : "X-HP-Client-Id",
+          "in" : "header",
+          "required" : false,
+          "type" : "string",
+          "default" : ""
+        }, {
+          "name" : "Authorization",
+          "in" : "header",
+          "required" : false,
+          "type" : "string",
+          "default" : ""
+        }, {
           "in" : "body",
           "name" : "body",
           "required" : false,
@@ -88,7 +122,7 @@
         } ],
         "responses" : {
           "200" : {
-            "description" : "Successful operation",
+            "description" : "successful operation",
             "schema" : {
               "type" : "string"
             }
@@ -100,11 +134,23 @@
       "post" : {
         "tags" : [ "securepaymentapi" ],
         "summary" : "Create Order",
-        "description" : "Create Order Notes",
+        "description" : "Create an Unfinished Order as per the Zone1 Payload and with the \"Authorozation\" such as Token etc.",
         "operationId" : "createorder",
         "consumes" : [ "application/json" ],
         "produces" : [ "application/json" ],
         "parameters" : [ {
+          "name" : "X-HP-Client-Id",
+          "in" : "header",
+          "required" : false,
+          "type" : "string",
+          "default" : ""
+        }, {
+          "name" : "Authorization",
+          "in" : "header",
+          "required" : true,
+          "type" : "string",
+          "default" : ""
+        }, {
           "in" : "body",
           "name" : "body",
           "required" : false,
@@ -114,7 +160,45 @@
         } ],
         "responses" : {
           "200" : {
-            "description" : "Successful operation",
+            "description" : "successful operation",
+            "schema" : {
+              "type" : "string"
+            }
+          }
+        }
+      }
+    },
+    "/securepaymentapi/holdauth" : {
+      "post" : {
+        "tags" : [ "securepaymentapi" ],
+        "summary" : "hold Authorization",
+        "description" : "Hold Authorization Notes",
+        "operationId" : "holdAuthorization",
+        "consumes" : [ "application/json" ],
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "name" : "X-HP-Client-Id",
+          "in" : "header",
+          "required" : true,
+          "type" : "string",
+          "default" : ""
+        }, {
+          "name" : "Authorization",
+          "in" : "header",
+          "required" : true,
+          "type" : "string",
+          "default" : ""
+        }, {
+          "in" : "body",
+          "name" : "body",
+          "required" : false,
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "successful operation",
             "schema" : {
               "type" : "string"
             }

@@ -7,7 +7,7 @@
   },
   "tags" : [ {
     "name" : "cancel",
-    "description" : "Cancel an order."
+    "description" : "Secure Pay UI: Cancel"
   }, {
     "name" : "pmm",
     "description" : "Secure Pay UI: PaymentMethod"

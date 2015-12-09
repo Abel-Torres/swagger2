@@ -13,7 +13,7 @@
     "description" : "Secure Pay UI: PaymentMethod"
   }, {
     "name" : "purchase",
-    "description" : "Secure Pay UI: Purchase"
+    "description" : "Initiate a purchase."
   }, {
     "name" : "securepaymentapi",
     "description" : "Secure Pay UI: Payment Backend API"
@@ -96,7 +96,7 @@
       "post" : {
         "tags" : [ "purchase" ],
         "summary" : "Initiate a purchase",
-        "description" : "Here is a high-level view of the purchase process.1.The user validates their credential via an authentication service (HP Web ID or third party).2.The user is presented with a purchase confirmation screen.3.The user may optionally manage their payment methods.4.Once the user confirms or aborts the purchase, the confirmation screen automatically takes the user back to the caller.",
+        "description" : "Here is a high-level view of the purchase process.\n1.The user validates their credential via an authentication service (HP Web ID or third party).<br>2.The user is presented with a purchase confirmation screen.3.The user may optionally manage their payment methods.4.Once the user confirms or aborts the purchase, the confirmation screen automatically takes the user back to the caller.",
         "operationId" : "purchase",
         "consumes" : [ "application/json" ],
         "produces" : [ "application/json" ],

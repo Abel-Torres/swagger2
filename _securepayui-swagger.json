@@ -10,7 +10,7 @@
     "description" : "Cancel an order."
   }, {
     "name" : "pmm",
-    "description" : "Secure Pay UI: PaymentMethod"
+    "description" : "Payment method."
   }, {
     "name" : "purchase",
     "description" : "Initiate a purchase."
@@ -61,7 +61,7 @@
       "get" : {
         "tags" : [ "pmm" ],
         "summary" : "Extract token",
-        "description" : "Extract token",
+        "description" : "Extract token and use it to authentiate the user. </br>Determine the user's payment method.<br>If the user and account are verified, the user is redirected to the landing page from which the user can manage purchases.",
         "operationId" : "extractToken",
         "parameters" : [ {
           "name" : "user-agent",

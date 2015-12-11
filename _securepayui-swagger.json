@@ -16,7 +16,7 @@
     "description" : "Initiate a purchase."
   }, {
     "name" : "securepaymentapi",
-    "description" : "Secure Pay UI: Payment Backend API"
+    "description" : "Payment Backend API"
   } ],
   "paths" : {
     "/cancel" : {
@@ -133,8 +133,8 @@
     "/securepaymentapi/createorder" : {
       "post" : {
         "tags" : [ "securepaymentapi" ],
-        "summary" : "Create Order",
-        "description" : "Create an Unfinished Order as per the Zone1 Payload and with the \"Authorozation\" such as Token etc.",
+        "summary" : "Create a purchase order.",
+        "description" : "Create an unfinished order as per the Zone1 Payload and with the \"Authorozation\" such as Token etc.",
         "operationId" : "createorder",
         "consumes" : [ "application/json" ],
         "produces" : [ "application/json" ],
@@ -171,8 +171,8 @@
     "/securepaymentapi/holdauth" : {
       "post" : {
         "tags" : [ "securepaymentapi" ],
-        "summary" : "hold Authorization",
-        "description" : "Hold Authorization Notes",
+        "summary" : "Hold authorization",
+        "description" : "Call this operation to place a hold authorization for the amount of the order on the user's payment account. This allows control of the timing of all stages of the payments flow from initial order through invoicing.<br>1.) Validate the token and client id.<br>2.) If the token and client id are valid, get the user's account id and payment method. Allowed payment methods include credit cards, AMEX, and PayPal.<br>3.) If successful, the call returns:<br>Accepted/Rejected/Review/Error with a corresponding reason code.",
         "operationId" : "holdAuthorization",
         "consumes" : [ "application/json" ],
         "produces" : [ "application/json" ],

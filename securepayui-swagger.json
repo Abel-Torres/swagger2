@@ -134,7 +134,7 @@
       "post" : {
         "tags" : [ "securepaymentapi" ],
         "summary" : "Create a purchase order.",
-        "description" : "Create an unfinished order as per the Zone1 Payload and with the \"Authorozation\" such as Token etc.",
+        "description" : "Create a \"regular\" one-time purchase order.This requires normal authorization and account token.",
         "operationId" : "createorder",
         "consumes" : [ "application/json" ],
         "produces" : [ "application/json" ],

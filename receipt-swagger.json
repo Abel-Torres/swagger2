@@ -1,0 +1,1896 @@
+{
+  "swagger" : "2.0",
+  "info" : {
+    "description" : "API Documentation for Receipt Service",
+    "version" : "v1",
+    "title" : "Swagger Receipt Service"
+  },
+  "host" : "receipt_host",
+  "basePath" : "/receipt",
+  "tags" : [ {
+    "name" : "external"
+  }, {
+    "name" : "ep"
+  }, {
+    "name" : "client"
+  }, {
+    "name" : "healthcheck"
+  } ],
+  "schemes" : [ "http", "https" ],
+  "paths" : {
+    "/healthcheck" : {
+      "get" : {
+        "tags" : [ "healthcheck" ],
+        "summary" : "Healthcheck api for receipt service. ",
+        "description" : "",
+        "operationId" : "healthCheck",
+        "parameters" : [ {
+          "name" : "extend",
+          "in" : "query",
+          "description" : "Extend health check for service dependancies",
+          "required" : false,
+          "type" : "boolean"
+        }, {
+          "name" : "monitoring",
+          "in" : "query",
+          "description" : "Monitoring type, currently only 'callback'",
+          "required" : false,
+          "type" : "string"
+        }, {
+          "name" : "monitoringParams",
+          "in" : "query",
+          "description" : "Monitoring params",
+          "required" : false,
+          "type" : "string"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Successful operation"
+          },
+          "500" : {
+            "description" : "Error request"
+          }
+        }
+      }
+    },
+    "/1.0/client/producthistory" : {
+      "get" : {
+        "tags" : [ "client" ],
+        "summary" : "Get active product history for the account specified in header(X-HP-Principal-Id). ",
+        "description" : "",
+        "operationId" : "getActiveProductHistory",
+        "parameters" : [ {
+          "name" : "pageNum",
+          "in" : "query",
+          "required" : false,
+          "type" : "integer",
+          "format" : "int32"
+        }, {
+          "name" : "pageSize",
+          "in" : "query",
+          "required" : false,
+          "type" : "integer",
+          "format" : "int32"
+        }, {
+          "name" : "sortBy",
+          "in" : "query",
+          "required" : false,
+          "type" : "string"
+        }, {
+          "name" : "sortDirection",
+          "in" : "query",
+          "description" : "asc or desc",
+          "required" : false,
+          "type" : "string"
+        }, {
+          "name" : "catalogId",
+          "in" : "query",
+          "required" : false,
+          "type" : "string"
+        }, {
+          "name" : "purchaseType",
+          "in" : "query",
+          "required" : false,
+          "type" : "string"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Success",
+            "schema" : {
+              "$ref" : "#/definitions/OutProductHistoryResponse"
+            }
+          }
+        }
+      }
+    },
+    "/1.0/client/productids" : {
+      "get" : {
+        "tags" : [ "client" ],
+        "summary" : "Get all active purchased product list for a given account identified by the auth header(X-HP-Principal-Id) or ceId. ",
+        "description" : "Used for GCC client",
+        "operationId" : "getProductIds",
+        "parameters" : [ {
+          "name" : "ceId",
+          "in" : "query",
+          "description" : "Customer entity id",
+          "required" : false,
+          "type" : "string"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Success",
+            "schema" : {
+              "$ref" : "#/definitions/OutProductsWithId"
+            }
+          },
+          "401" : {
+            "description" : "Unauthorized request",
+            "schema" : {
+              "$ref" : "#/definitions/Error"
+            }
+          },
+          "500" : {
+            "description" : "Error request",
+            "schema" : {
+              "$ref" : "#/definitions/Error"
+            }
+          }
+        }
+      }
+    },
+    "/1.0/ep/notifications/types" : {
+      "get" : {
+        "tags" : [ "ep" ],
+        "summary" : "Get supported notification types. ",
+        "description" : "",
+        "operationId" : "getNotificationsRegistrationsTypes",
+        "responses" : {
+          "200" : {
+            "description" : "Success",
+            "schema" : {
+              "$ref" : "#/definitions/OutNotificationTypeList"
+            }
+          }
+        }
+      }
+    },
+    "/1.0/ep/notifications/types/{id}" : {
+      "get" : {
+        "tags" : [ "ep" ],
+        "summary" : "Get notification type by id. ",
+        "description" : "",
+        "operationId" : "getNotificationsRegistrationsTypeById",
+        "parameters" : [ {
+          "name" : "id",
+          "in" : "path",
+          "description" : "",
+          "required" : true,
+          "type" : "integer",
+          "format" : "int32"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Success",
+            "schema" : {
+              "$ref" : "#/definitions/OutNotificationTemplateResponse"
+            }
+          }
+        }
+      }
+    },
+    "/1.0/external/billinginfo" : {
+      "get" : {
+        "tags" : [ "external" ],
+        "summary" : "Querying user's billing accounts info, it will call PO Engine service and payment service to get all billing info and merge them together.",
+        "description" : "'receipt_customer_support_api_access' permission is required for the caller in zone 1.",
+        "operationId" : "getBillingInfo",
+        "parameters" : [ {
+          "name" : "hpwsAccountId",
+          "in" : "query",
+          "description" : "Either 'hpwsAccountId' or 'thirdPartyAccountId' or 'hpwsEmail' should be required",
+          "required" : false,
+          "type" : "string"
+        }, {
+          "name" : "thirdPartyAccountId",
+          "in" : "query",
+          "required" : false,
+          "type" : "string"
+        }, {
+          "name" : "hpwsEmail",
+          "in" : "query",
+          "required" : false,
+          "type" : "string"
+        }, {
+          "name" : "agentName",
+          "in" : "query",
+          "description" : "",
+          "required" : true,
+          "type" : "string"
+        }, {
+          "name" : "agentId",
+          "in" : "query",
+          "description" : "",
+          "required" : true,
+          "type" : "string"
+        }, {
+          "name" : "agentEmail",
+          "in" : "query",
+          "description" : "",
+          "required" : true,
+          "type" : "string"
+        }, {
+          "name" : "start",
+          "in" : "query",
+          "description" : "Start index, >= 1",
+          "required" : false,
+          "type" : "integer",
+          "format" : "int32"
+        }, {
+          "name" : "maxSize",
+          "in" : "query",
+          "required" : false,
+          "type" : "integer",
+          "format" : "int32"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Success",
+            "schema" : {
+              "$ref" : "#/definitions/OutBillingInfoResponse"
+            }
+          },
+          "401" : {
+            "description" : "Unauthorized request",
+            "schema" : {
+              "$ref" : "#/definitions/Error"
+            }
+          }
+        }
+      }
+    },
+    "/1.0/external/cancel" : {
+      "put" : {
+        "tags" : [ "external" ],
+        "summary" : "Cancel recurring order items: 1. If all items are cancelled, the subscription will be updated to CANCELLED status and a new cancelled transaction will be created and attached with it; 2. If part of the subscription cancelled, a new cancelled subscription will be created togther with new cancelled transaction, the existing subscription will be updated with reduced quantity",
+        "description" : "'receipt_customer_support_api_access' permission is required for the caller in zone 1.",
+        "operationId" : "cancelOrder",
+        "parameters" : [ {
+          "in" : "body",
+          "name" : "body",
+          "description" : "",
+          "required" : true,
+          "schema" : {
+            "$ref" : "#/definitions/InCancelOrderExternalDTO"
+          }
+        }, {
+          "name" : "thirdPartyAccountId",
+          "in" : "query",
+          "required" : false,
+          "type" : "string"
+        }, {
+          "name" : "agentName",
+          "in" : "query",
+          "description" : "",
+          "required" : true,
+          "type" : "string"
+        }, {
+          "name" : "agentId",
+          "in" : "query",
+          "description" : "",
+          "required" : true,
+          "type" : "string"
+        }, {
+          "name" : "agentEmail",
+          "in" : "query",
+          "description" : "",
+          "required" : true,
+          "type" : "string"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Success",
+            "schema" : {
+              "$ref" : "#/definitions/OutCancelInfoExternal"
+            }
+          },
+          "400" : {
+            "description" : "Bad request",
+            "schema" : {
+              "$ref" : "#/definitions/Error"
+            }
+          },
+          "401" : {
+            "description" : "Unauthorized request",
+            "schema" : {
+              "$ref" : "#/definitions/Error"
+            }
+          }
+        }
+      }
+    },
+    "/1.0/external/entitlementhistory" : {
+      "get" : {
+        "tags" : [ "external" ],
+        "summary" : "Query user's entitlment history for specified product by query params.",
+        "description" : "'receipt_customer_support_api_access' permission is required for the caller in zone 1.",
+        "operationId" : "getEntitlementHistory",
+        "parameters" : [ {
+          "name" : "hpwsAccountId",
+          "in" : "query",
+          "description" : "Either 'hpwsAccountId' or 'thirdPartyAccountId' or 'hpwsEmail' should be required",
+          "required" : false,
+          "type" : "string"
+        }, {
+          "name" : "thirdPartyAccountId",
+          "in" : "query",
+          "required" : false,
+          "type" : "string"
+        }, {
+          "name" : "hpwsEmail",
+          "in" : "query",
+          "required" : false,
+          "type" : "string"
+        }, {
+          "name" : "agentName",
+          "in" : "query",
+          "description" : "",
+          "required" : true,
+          "type" : "string"
+        }, {
+          "name" : "agentId",
+          "in" : "query",
+          "description" : "",
+          "required" : true,
+          "type" : "string"
+        }, {
+          "name" : "agentEmail",
+          "in" : "query",
+          "description" : "",
+          "required" : true,
+          "type" : "string"
+        }, {
+          "name" : "pageNum",
+          "in" : "query",
+          "description" : "",
+          "required" : true,
+          "type" : "integer",
+          "format" : "int32"
+        }, {
+          "name" : "pageSize",
+          "in" : "query",
+          "description" : "",
+          "required" : true,
+          "type" : "integer",
+          "format" : "int32"
+        }, {
+          "name" : "sortBy",
+          "in" : "query",
+          "required" : false,
+          "type" : "string"
+        }, {
+          "name" : "sortDirection",
+          "in" : "query",
+          "required" : false,
+          "type" : "string"
+        }, {
+          "name" : "productId",
+          "in" : "query",
+          "description" : "",
+          "required" : true,
+          "type" : "string"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Success",
+            "schema" : {
+              "$ref" : "#/definitions/OutEntitlementHistoryResponse"
+            }
+          },
+          "401" : {
+            "description" : "Unauthorized request",
+            "schema" : {
+              "$ref" : "#/definitions/Error"
+            }
+          }
+        }
+      }
+    },
+    "/1.0/external/entitlements/cancel" : {
+      "put" : {
+        "tags" : [ "external" ],
+        "summary" : "Cancel inbound recurring order.",
+        "description" : "'receipt_customer_support_api_access' permission is required for the caller in zone 1.",
+        "operationId" : "cancelInBoundRecurringEntitlement",
+        "parameters" : [ {
+          "in" : "body",
+          "name" : "body",
+          "description" : "",
+          "required" : true,
+          "schema" : {
+            "$ref" : "#/definitions/InCancelOrderDTO"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Success",
+            "schema" : {
+              "$ref" : "#/definitions/OutResponseCancelOrder"
+            }
+          },
+          "400" : {
+            "description" : "Bad request",
+            "schema" : {
+              "$ref" : "#/definitions/Error"
+            }
+          },
+          "401" : {
+            "description" : "Unauthorized request",
+            "schema" : {
+              "$ref" : "#/definitions/Error"
+            }
+          }
+        }
+      }
+    },
+    "/1.0/external/entitlements/events" : {
+      "get" : {
+        "tags" : [ "external" ],
+        "summary" : "Get all subscriptions and related current transactions for all users with specified product based on time range.",
+        "description" : "For HPC",
+        "operationId" : "getTimeBasedSubscriptionTransactions",
+        "parameters" : [ {
+          "name" : "productId",
+          "in" : "query",
+          "required" : true,
+          "type" : "string"
+        }, {
+          "name" : "page",
+          "in" : "query",
+          "required" : false,
+          "type" : "integer",
+          "format" : "int32"
+        }, {
+          "name" : "perPage",
+          "in" : "query",
+          "required" : false,
+          "type" : "integer",
+          "format" : "int32"
+        }, {
+          "name" : "transactionStartDate",
+          "in" : "query",
+          "required" : true,
+          "type" : "integer",
+          "format" : "int64"
+        }, {
+          "name" : "transactionEndDate",
+          "in" : "query",
+          "required" : false,
+          "type" : "integer",
+          "format" : "int64"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Success",
+            "schema" : {
+              "$ref" : "#/definitions/TimeBasedSubscriptionTransactionDTO"
+            }
+          },
+          "401" : {
+            "description" : "Error request",
+            "schema" : {
+              "$ref" : "#/definitions/OutTimeBasedQueryErrorDTO"
+            }
+          }
+        }
+      }
+    },
+    "/1.0/external/entitlements/productids" : {
+      "get" : {
+        "tags" : [ "external" ],
+        "summary" : "Return all the products/apps purchased by the user identified by the request param.",
+        "description" : "'receipt_customer_support_api_access' permission is required for the caller in zone 1.",
+        "operationId" : "getProductIdsForInboundEntitlements",
+        "parameters" : [ {
+          "name" : "userAccountId",
+          "in" : "query",
+          "required" : false,
+          "type" : "string"
+        }, {
+          "name" : "ceId",
+          "in" : "query",
+          "required" : false,
+          "type" : "string"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Success",
+            "schema" : {
+              "$ref" : "#/definitions/OutProductsWithId"
+            }
+          },
+          "400" : {
+            "description" : "Bad request",
+            "schema" : {
+              "$ref" : "#/definitions/Error"
+            }
+          },
+          "401" : {
+            "description" : "Unauthorized request",
+            "schema" : {
+              "$ref" : "#/definitions/Error"
+            }
+          }
+        }
+      }
+    },
+    "/1.0/external/entitlements/receipt" : {
+      "post" : {
+        "tags" : [ "external" ],
+        "summary" : "Create receipts for customer which purchases the product externally. orderId and invoiceId are not needed here.",
+        "description" : "'receipt_customer_support_api_access' permission is required for the caller in zone 1.",
+        "operationId" : "createInboundEntitlement",
+        "parameters" : [ {
+          "in" : "body",
+          "name" : "body",
+          "description" : "",
+          "required" : true,
+          "schema" : {
+            "$ref" : "#/definitions/InExternalChargeInfoDTO"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Success",
+            "schema" : {
+              "$ref" : "#/definitions/OutStatusResponse"
+            }
+          },
+          "400" : {
+            "description" : "Bad request",
+            "schema" : {
+              "$ref" : "#/definitions/Error"
+            }
+          },
+          "401" : {
+            "description" : "Unauthorized request",
+            "schema" : {
+              "$ref" : "#/definitions/Error"
+            }
+          }
+        }
+      }
+    },
+    "/1.0/external/entitlements/recurring/charges" : {
+      "put" : {
+        "tags" : [ "external" ],
+        "summary" : "Update recurring charges dates.",
+        "description" : "'receipt_customer_support_api_access' permission is required for the caller in zone 1.",
+        "operationId" : "updateInboundRecurringCharges",
+        "parameters" : [ {
+          "in" : "body",
+          "name" : "body",
+          "description" : "",
+          "required" : true,
+          "schema" : {
+            "$ref" : "#/definitions/InExternalOrderUpdateDTO"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Success",
+            "schema" : {
+              "$ref" : "#/definitions/RecurringUpdateDetail"
+            }
+          },
+          "400" : {
+            "description" : "Bad request",
+            "schema" : {
+              "$ref" : "#/definitions/Error"
+            }
+          },
+          "401" : {
+            "description" : "Unauthorized request",
+            "schema" : {
+              "$ref" : "#/definitions/Error"
+            }
+          }
+        }
+      }
+    },
+    "/1.0/external/entitlements/transactions" : {
+      "get" : {
+        "tags" : [ "external" ],
+        "summary" : "List all current transactions for user who purchased the product.",
+        "description" : "",
+        "operationId" : "getEntitlementTransactions",
+        "parameters" : [ {
+          "name" : "productId",
+          "in" : "query",
+          "description" : "",
+          "required" : true,
+          "type" : "string"
+        }, {
+          "name" : "hpwsAccountId",
+          "in" : "query",
+          "description" : "Either 'hpwsAccountId' or 'thirdPartyAccountId' or 'hpwsEmail' should be required",
+          "required" : false,
+          "type" : "string"
+        }, {
+          "name" : "thirdPartyAccountId",
+          "in" : "query",
+          "required" : false,
+          "type" : "string"
+        }, {
+          "name" : "hpwsEmail",
+          "in" : "query",
+          "required" : false,
+          "type" : "string"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Success",
+            "schema" : {
+              "$ref" : "#/definitions/OutEntitlementTransactionsResponse"
+            }
+          }
+        }
+      }
+    },
+    "/1.0/external/purchasehistory" : {
+      "get" : {
+        "tags" : [ "external" ],
+        "summary" : "Get all purchase product history of the user by query params.",
+        "description" : "'receipt_customer_support_api_access' permission is required for the caller in zone 1.",
+        "operationId" : "getPurchaseHistory",
+        "parameters" : [ {
+          "name" : "hpwsAccountId",
+          "in" : "query",
+          "description" : "Either 'hpwsAccountId' or 'thirdPartyAccountId' or 'hpwsEmail' should be required",
+          "required" : false,
+          "type" : "string"
+        }, {
+          "name" : "thirdPartyAccountId",
+          "in" : "query",
+          "required" : false,
+          "type" : "string"
+        }, {
+          "name" : "hpwsEmail",
+          "in" : "query",
+          "required" : false,
+          "type" : "string"
+        }, {
+          "name" : "agentName",
+          "in" : "query",
+          "description" : "",
+          "required" : true,
+          "type" : "string"
+        }, {
+          "name" : "agentId",
+          "in" : "query",
+          "description" : "",
+          "required" : true,
+          "type" : "string"
+        }, {
+          "name" : "agentEmail",
+          "in" : "query",
+          "description" : "",
+          "required" : true,
+          "type" : "string"
+        }, {
+          "name" : "pageNum",
+          "in" : "query",
+          "description" : "",
+          "required" : true,
+          "type" : "integer",
+          "format" : "int32"
+        }, {
+          "name" : "pageSize",
+          "in" : "query",
+          "description" : "",
+          "required" : true,
+          "type" : "integer",
+          "format" : "int32"
+        }, {
+          "name" : "sortBy",
+          "in" : "query",
+          "required" : false,
+          "type" : "string"
+        }, {
+          "name" : "sortDirection",
+          "in" : "query",
+          "required" : false,
+          "type" : "string"
+        }, {
+          "name" : "catalogId",
+          "in" : "query",
+          "required" : false,
+          "type" : "string"
+        }, {
+          "name" : "purchaseType",
+          "in" : "query",
+          "required" : false,
+          "type" : "string"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Success",
+            "schema" : {
+              "$ref" : "#/definitions/OutProductHistoryResponseExternal"
+            }
+          },
+          "401" : {
+            "description" : "Unauthorized request",
+            "schema" : {
+              "$ref" : "#/definitions/Error"
+            }
+          }
+        }
+      }
+    },
+    "/1.0/external/purchases/productids" : {
+      "get" : {
+        "tags" : [ "external" ],
+        "summary" : "Get all active purchased product list of the user identified by user email in url and auth owner in header.",
+        "description" : "'receipt_customer_support_api_access' permission is required for the caller in zone 1.",
+        "operationId" : "getProductIds",
+        "parameters" : [ {
+          "name" : "userEmail",
+          "in" : "query",
+          "description" : "User email",
+          "required" : true,
+          "type" : "string"
+        }, {
+          "name" : "nullProducts",
+          "in" : "query",
+          "description" : "Not used now",
+          "required" : false,
+          "type" : "boolean"
+        }, {
+          "name" : "errorCheck",
+          "in" : "query",
+          "description" : "Not used now",
+          "required" : false,
+          "type" : "boolean"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Success",
+            "schema" : {
+              "$ref" : "#/definitions/OutProductsWithId"
+            }
+          },
+          "401" : {
+            "description" : "Unauthorized request",
+            "schema" : {
+              "$ref" : "#/definitions/Error"
+            }
+          },
+          "500" : {
+            "description" : "Error request",
+            "schema" : {
+              "$ref" : "#/definitions/Error"
+            }
+          }
+        }
+      }
+    }
+  },
+  "definitions" : {
+    "BillingInfo" : {
+      "properties" : {
+        "totalRecords" : {
+          "type" : "integer",
+          "format" : "int32"
+        },
+        "hasMoreRecords" : {
+          "type" : "boolean",
+          "default" : false
+        },
+        "accounts" : {
+          "type" : "array",
+          "items" : {
+            "$ref" : "#/definitions/BillingInfoAccount"
+          }
+        },
+        "status" : {
+          "$ref" : "#/definitions/OutStatusResponse"
+        }
+      }
+    },
+    "BillingInfoAccount" : {
+      "properties" : {
+        "type" : {
+          "type" : "string"
+        },
+        "firstName" : {
+          "type" : "string"
+        },
+        "lastName" : {
+          "type" : "string"
+        },
+        "creditCard" : {
+          "$ref" : "#/definitions/BillingInfoCreditCard"
+        },
+        "billTo" : {
+          "$ref" : "#/definitions/BillingInfoBillToAddress"
+        },
+        "status" : {
+          "type" : "string"
+        }
+      }
+    },
+    "BillingInfoBillToAddress" : {
+      "properties" : {
+        "address1" : {
+          "type" : "string"
+        },
+        "address2" : {
+          "type" : "string"
+        },
+        "address3" : {
+          "type" : "string"
+        },
+        "city" : {
+          "type" : "string"
+        },
+        "state" : {
+          "type" : "string"
+        },
+        "zip" : {
+          "type" : "string"
+        },
+        "country" : {
+          "type" : "string"
+        }
+      }
+    },
+    "BillingInfoCreditCard" : {
+      "properties" : {
+        "type" : {
+          "type" : "string"
+        },
+        "lastFour" : {
+          "type" : "string"
+        }
+      }
+    },
+    "EntitlementHistoryInfo" : {
+      "properties" : {
+        "productId" : {
+          "type" : "string"
+        },
+        "catalogId" : {
+          "type" : "string"
+        },
+        "sku" : {
+          "type" : "string"
+        },
+        "orderNo" : {
+          "type" : "string"
+        },
+        "quantity" : {
+          "type" : "integer",
+          "format" : "int32"
+        },
+        "price" : {
+          "type" : "number",
+          "format" : "float"
+        },
+        "currency" : {
+          "type" : "string"
+        },
+        "purchaseType" : {
+          "type" : "string"
+        },
+        "interval" : {
+          "type" : "string"
+        },
+        "intervalAmount" : {
+          "type" : "integer",
+          "format" : "int32"
+        },
+        "validUntilDate" : {
+          "type" : "string",
+          "format" : "date-time"
+        },
+        "billingStartDate" : {
+          "type" : "string",
+          "format" : "date-time"
+        },
+        "billingEndDate" : {
+          "type" : "string",
+          "format" : "date-time"
+        },
+        "durationStartDate" : {
+          "type" : "string",
+          "format" : "date-time"
+        },
+        "durationEndDate" : {
+          "type" : "string",
+          "format" : "date-time"
+        },
+        "accountId" : {
+          "type" : "string"
+        },
+        "thirdPartyAccountId" : {
+          "type" : "string"
+        },
+        "email" : {
+          "type" : "string"
+        },
+        "originalPurchaseDate" : {
+          "type" : "string",
+          "format" : "date-time"
+        },
+        "cancellationDate" : {
+          "type" : "string",
+          "format" : "date-time"
+        },
+        "currEntitleStatus" : {
+          "type" : "string"
+        },
+        "recurringChargeInfo" : {
+          "$ref" : "#/definitions/EntitlementHistoryRecurringChargeInfo"
+        }
+      }
+    },
+    "EntitlementHistoryRecurringChargeInfo" : {
+      "properties" : {
+        "recurringChargeDates" : {
+          "type" : "array",
+          "items" : {
+            "type" : "string",
+            "format" : "date-time"
+          }
+        },
+        "recentRecurringChargeDates" : {
+          "type" : "array",
+          "items" : {
+            "type" : "string",
+            "format" : "date-time"
+          }
+        },
+        "totalRecurringChargeCount" : {
+          "type" : "integer",
+          "format" : "int32"
+        }
+      }
+    },
+    "EntitlementHistoryResponse" : {
+      "properties" : {
+        "total" : {
+          "type" : "integer",
+          "format" : "int32"
+        },
+        "entitlementHistoryInfo" : {
+          "type" : "array",
+          "items" : {
+            "$ref" : "#/definitions/EntitlementHistoryInfo"
+          }
+        }
+      }
+    },
+    "EntitlementTransactionInfo" : {
+      "properties" : {
+        "orderId" : {
+          "type" : "string"
+        },
+        "purchaseType" : {
+          "type" : "string"
+        },
+        "event" : {
+          "type" : "string"
+        },
+        "quantity" : {
+          "type" : "integer",
+          "format" : "int32"
+        },
+        "sku" : {
+          "type" : "string"
+        },
+        "transactionDate" : {
+          "type" : "string"
+        },
+        "validUntilDate" : {
+          "type" : "string"
+        },
+        "billingStartDate" : {
+          "type" : "string"
+        },
+        "billingEndDate" : {
+          "type" : "string"
+        }
+      }
+    },
+    "EntitlementTransactionsResponse" : {
+      "properties" : {
+        "enterpriseId" : {
+          "type" : "string"
+        },
+        "productId" : {
+          "type" : "string"
+        },
+        "accountId" : {
+          "type" : "string"
+        },
+        "userEmailAddress" : {
+          "type" : "string"
+        },
+        "thirdPartyAccountId" : {
+          "type" : "string"
+        },
+        "transactions" : {
+          "type" : "array",
+          "items" : {
+            "$ref" : "#/definitions/EntitlementTransactionInfo"
+          }
+        }
+      }
+    },
+    "Error" : {
+      "properties" : {
+        "errorCode" : {
+          "type" : "string"
+        },
+        "errorMessage" : {
+          "type" : "string"
+        },
+        "details" : {
+          "type" : "string"
+        },
+        "requestURI" : {
+          "type" : "string"
+        }
+      }
+    },
+    "ExternalCancelInfo" : {
+      "properties" : {
+        "id" : {
+          "type" : "string"
+        },
+        "errorCode" : {
+          "type" : "string"
+        },
+        "requestURI" : {
+          "type" : "string"
+        },
+        "errorMessage" : {
+          "type" : "string"
+        },
+        "detail" : {
+          "type" : "string"
+        }
+      }
+    },
+    "InCancelOrderDTO" : {
+      "properties" : {
+        "orderId" : {
+          "type" : "string"
+        },
+        "items" : {
+          "type" : "array",
+          "items" : {
+            "$ref" : "#/definitions/InCancelOrderItemDTO"
+          }
+        }
+      }
+    },
+    "InCancelOrderExternalDTO" : {
+      "properties" : {
+        "enterpriseId" : {
+          "type" : "string"
+        },
+        "thirdPartyAccountId" : {
+          "type" : "string"
+        },
+        "accountId" : {
+          "type" : "string"
+        },
+        "orderId" : {
+          "type" : "string"
+        },
+        "items" : {
+          "type" : "array",
+          "items" : {
+            "$ref" : "#/definitions/InCancelOrderItemExternalDTO"
+          }
+        }
+      }
+    },
+    "InCancelOrderItemDTO" : {
+      "properties" : {
+        "sku" : {
+          "type" : "string"
+        },
+        "quantity" : {
+          "type" : "integer",
+          "format" : "int32"
+        },
+        "termination" : {
+          "type" : "boolean",
+          "default" : false
+        }
+      }
+    },
+    "InCancelOrderItemExternalDTO" : {
+      "properties" : {
+        "sku" : {
+          "type" : "string"
+        },
+        "quantity" : {
+          "type" : "integer",
+          "format" : "int32"
+        }
+      }
+    },
+    "InExternalChargeInfoDTO" : {
+      "properties" : {
+        "userAccountId" : {
+          "type" : "string"
+        },
+        "chargeDate" : {
+          "type" : "string",
+          "format" : "date-time"
+        },
+        "ceId" : {
+          "type" : "string"
+        },
+        "items" : {
+          "type" : "array",
+          "items" : {
+            "$ref" : "#/definitions/InExternalChargeInfoItemDTO"
+          }
+        }
+      }
+    },
+    "InExternalChargeInfoItemDTO" : {
+      "properties" : {
+        "purchaseType" : {
+          "type" : "string"
+        },
+        "sku" : {
+          "type" : "string"
+        },
+        "quantity" : {
+          "type" : "integer",
+          "format" : "int32"
+        },
+        "billStartDate" : {
+          "type" : "string",
+          "format" : "date-time"
+        },
+        "billEndDate" : {
+          "type" : "string",
+          "format" : "date-time"
+        }
+      }
+    },
+    "InExternalOrderUpdateDTO" : {
+      "properties" : {
+        "userAccountId" : {
+          "type" : "string"
+        },
+        "ceId" : {
+          "type" : "string"
+        },
+        "enterpriseId" : {
+          "type" : "string"
+        },
+        "chargeDate" : {
+          "type" : "string",
+          "format" : "date-time"
+        },
+        "items" : {
+          "type" : "array",
+          "items" : {
+            "$ref" : "#/definitions/InExternalOrderUpdateItemDTO"
+          }
+        }
+      }
+    },
+    "InExternalOrderUpdateItemDTO" : {
+      "properties" : {
+        "recurringId" : {
+          "type" : "string"
+        },
+        "billStartDate" : {
+          "type" : "string",
+          "format" : "date-time"
+        },
+        "billEndDate" : {
+          "type" : "string",
+          "format" : "date-time"
+        },
+        "purchaseType" : {
+          "type" : "string"
+        }
+      }
+    },
+    "NotificationEmailDetail" : {
+      "properties" : {
+        "name" : {
+          "type" : "string"
+        },
+        "email" : {
+          "type" : "string"
+        }
+      }
+    },
+    "NotificationEndPointDetails" : {
+      "properties" : {
+        "url" : {
+          "type" : "string"
+        },
+        "httpHeaders" : {
+          "type" : "object",
+          "additionalProperties" : {
+            "type" : "string"
+          }
+        },
+        "getoAuthHeaderName" : {
+          "type" : "string"
+        },
+        "getoAuthPrefix" : {
+          "type" : "string"
+        },
+        "httpMethod" : {
+          "type" : "string"
+        }
+      }
+    },
+    "NotificationPayloadMapping" : {
+      "properties" : {
+        "availableAttributes" : {
+          "type" : "array",
+          "items" : {
+            "type" : "string"
+          }
+        },
+        "mapping" : {
+          "type" : "object",
+          "additionalProperties" : {
+            "type" : "string"
+          }
+        },
+        "availableEvents" : {
+          "type" : "string"
+        },
+        "interestedEvents" : {
+          "type" : "string"
+        }
+      }
+    },
+    "OAuthEndPointDetails2" : {
+      "properties" : {
+        "url" : {
+          "type" : "string"
+        },
+        "httpHeaders" : {
+          "type" : "object",
+          "additionalProperties" : {
+            "type" : "string"
+          }
+        },
+        "httpMethod" : {
+          "type" : "string"
+        },
+        "credentials" : {
+          "type" : "object",
+          "additionalProperties" : {
+            "type" : "string"
+          }
+        }
+      }
+    },
+    "OutBillingInfoResponse" : {
+      "properties" : {
+        "status" : {
+          "$ref" : "#/definitions/ResponseStatusDetail"
+        },
+        "response" : {
+          "$ref" : "#/definitions/BillingInfo"
+        }
+      }
+    },
+    "OutCancelInfoExternal" : {
+      "properties" : {
+        "status" : {
+          "$ref" : "#/definitions/ResponseStatusDetail"
+        },
+        "response" : {
+          "$ref" : "#/definitions/ExternalCancelInfo"
+        }
+      }
+    },
+    "OutCancelOrderItem" : {
+      "properties" : {
+        "sku" : {
+          "type" : "string"
+        },
+        "status" : {
+          "type" : "string"
+        },
+        "message" : {
+          "type" : "string"
+        }
+      }
+    },
+    "OutEntitlementHistoryResponse" : {
+      "properties" : {
+        "status" : {
+          "$ref" : "#/definitions/ResponseStatusDetail"
+        },
+        "response" : {
+          "$ref" : "#/definitions/EntitlementHistoryResponse"
+        }
+      }
+    },
+    "OutEntitlementTransactionsResponse" : {
+      "properties" : {
+        "status" : {
+          "$ref" : "#/definitions/ResponseStatusDetail"
+        },
+        "response" : {
+          "$ref" : "#/definitions/EntitlementTransactionsResponse"
+        }
+      }
+    },
+    "OutNotificationTemplate" : {
+      "properties" : {
+        "id" : {
+          "type" : "integer",
+          "format" : "int32"
+        },
+        "productId" : {
+          "type" : "string"
+        },
+        "callbackEnabled" : {
+          "type" : "string"
+        },
+        "type" : {
+          "type" : "string"
+        },
+        "authorization" : {
+          "type" : "string"
+        },
+        "getoAuthEndPointDetails" : {
+          "$ref" : "#/definitions/OAuthEndPointDetails2"
+        },
+        "notificationEndPointDetails" : {
+          "$ref" : "#/definitions/NotificationEndPointDetails"
+        },
+        "notificationEmailDetails" : {
+          "type" : "array",
+          "items" : {
+            "$ref" : "#/definitions/NotificationEmailDetail"
+          }
+        },
+        "notificationPayloadMapping" : {
+          "$ref" : "#/definitions/NotificationPayloadMapping"
+        }
+      }
+    },
+    "OutNotificationTemplateResponse" : {
+      "properties" : {
+        "status" : {
+          "$ref" : "#/definitions/ResponseStatusDetail"
+        },
+        "response" : {
+          "$ref" : "#/definitions/OutNotificationTemplate"
+        }
+      }
+    },
+    "OutNotificationType" : {
+      "properties" : {
+        "id" : {
+          "type" : "integer",
+          "format" : "int32"
+        },
+        "type" : {
+          "type" : "string"
+        },
+        "authorization" : {
+          "type" : "string"
+        }
+      }
+    },
+    "OutNotificationTypeList" : {
+      "properties" : {
+        "status" : {
+          "$ref" : "#/definitions/ResponseStatusDetail"
+        },
+        "response" : {
+          "$ref" : "#/definitions/OutNotificationTypeResponse"
+        }
+      }
+    },
+    "OutNotificationTypeResponse" : {
+      "properties" : {
+        "notificationTypes" : {
+          "type" : "array",
+          "items" : {
+            "$ref" : "#/definitions/OutNotificationType"
+          }
+        }
+      }
+    },
+    "OutProductHistoryResponse" : {
+      "properties" : {
+        "status" : {
+          "$ref" : "#/definitions/ResponseStatusDetail"
+        },
+        "response" : {
+          "$ref" : "#/definitions/ProductHistoryResponse"
+        }
+      }
+    },
+    "OutProductHistoryResponseExternal" : {
+      "properties" : {
+        "status" : {
+          "$ref" : "#/definitions/ResponseStatusDetail"
+        },
+        "response" : {
+          "$ref" : "#/definitions/ProductHistoryResponseExternal"
+        }
+      }
+    },
+    "OutProductsWithId" : {
+      "properties" : {
+        "status" : {
+          "$ref" : "#/definitions/ResponseStatusDetail"
+        },
+        "response" : {
+          "$ref" : "#/definitions/ProductResponse"
+        }
+      }
+    },
+    "OutResponseCancelOrder" : {
+      "properties" : {
+        "items" : {
+          "type" : "array",
+          "items" : {
+            "$ref" : "#/definitions/OutCancelOrderItem"
+          }
+        },
+        "status" : {
+          "$ref" : "#/definitions/ResponseStatusDetail"
+        }
+      }
+    },
+    "OutStatusResponse" : {
+      "properties" : {
+        "status" : {
+          "$ref" : "#/definitions/ResponseStatusDetail"
+        }
+      }
+    },
+    "OutTimeBasedQueryErrorDTO" : {
+      "properties" : {
+        "status" : {
+          "type" : "string"
+        },
+        "code" : {
+          "type" : "string"
+        },
+        "message" : {
+          "type" : "string"
+        }
+      }
+    },
+    "ProductHistoryInfo" : {
+      "properties" : {
+        "id" : {
+          "type" : "string"
+        },
+        "catalogId" : {
+          "type" : "string"
+        },
+        "sku" : {
+          "type" : "string"
+        },
+        "orderId" : {
+          "type" : "string"
+        },
+        "purchaseType" : {
+          "type" : "string"
+        },
+        "interval" : {
+          "type" : "string"
+        },
+        "intervalAmount" : {
+          "type" : "integer",
+          "format" : "int32"
+        },
+        "purchaseDate" : {
+          "type" : "string",
+          "format" : "date-time"
+        },
+        "price" : {
+          "type" : "number",
+          "format" : "float"
+        },
+        "total" : {
+          "type" : "number",
+          "format" : "float"
+        },
+        "tax" : {
+          "type" : "number",
+          "format" : "float"
+        },
+        "showPriceWithVat" : {
+          "type" : "boolean",
+          "default" : false
+        },
+        "currency" : {
+          "type" : "string"
+        },
+        "quantity" : {
+          "type" : "integer",
+          "format" : "int32"
+        },
+        "status" : {
+          "type" : "string"
+        },
+        "validUntilDate" : {
+          "type" : "string",
+          "format" : "date-time"
+        },
+        "billingStartDate" : {
+          "type" : "string",
+          "format" : "date-time"
+        },
+        "billingEndDate" : {
+          "type" : "string",
+          "format" : "date-time"
+        },
+        "durationStartDate" : {
+          "type" : "string",
+          "format" : "date-time"
+        },
+        "durationEndDate" : {
+          "type" : "string",
+          "format" : "date-time"
+        },
+        "version" : {
+          "type" : "string"
+        },
+        "reBuy" : {
+          "type" : "boolean",
+          "default" : false
+        }
+      }
+    },
+    "ProductHistoryInfoExternal" : {
+      "properties" : {
+        "id" : {
+          "type" : "string"
+        },
+        "catalogId" : {
+          "type" : "string"
+        },
+        "sku" : {
+          "type" : "string"
+        },
+        "orderId" : {
+          "type" : "string"
+        },
+        "purchaseType" : {
+          "type" : "string"
+        },
+        "interval" : {
+          "type" : "string"
+        },
+        "intervalAmount" : {
+          "type" : "integer",
+          "format" : "int32"
+        },
+        "purchaseDate" : {
+          "type" : "string",
+          "format" : "date-time"
+        },
+        "price" : {
+          "type" : "number",
+          "format" : "float"
+        },
+        "currency" : {
+          "type" : "string"
+        },
+        "quantity" : {
+          "type" : "integer",
+          "format" : "int32"
+        },
+        "status" : {
+          "type" : "string"
+        },
+        "validUntilDate" : {
+          "type" : "string",
+          "format" : "date-time"
+        },
+        "billingStartDate" : {
+          "type" : "string",
+          "format" : "date-time"
+        },
+        "billingEndDate" : {
+          "type" : "string",
+          "format" : "date-time"
+        },
+        "durationStartDate" : {
+          "type" : "string",
+          "format" : "date-time"
+        },
+        "durationEndDate" : {
+          "type" : "string",
+          "format" : "date-time"
+        },
+        "version" : {
+          "type" : "string"
+        }
+      }
+    },
+    "ProductHistoryResponse" : {
+      "properties" : {
+        "total" : {
+          "type" : "integer",
+          "format" : "int32"
+        },
+        "pageNum" : {
+          "type" : "integer",
+          "format" : "int32"
+        },
+        "pageSize" : {
+          "type" : "integer",
+          "format" : "int32"
+        },
+        "sortBy" : {
+          "type" : "string"
+        },
+        "sortDirection" : {
+          "type" : "string"
+        },
+        "products" : {
+          "type" : "array",
+          "items" : {
+            "$ref" : "#/definitions/ProductHistoryInfo"
+          }
+        }
+      }
+    },
+    "ProductHistoryResponseExternal" : {
+      "properties" : {
+        "total" : {
+          "type" : "integer",
+          "format" : "int32"
+        },
+        "pageNum" : {
+          "type" : "integer",
+          "format" : "int32"
+        },
+        "pageSize" : {
+          "type" : "integer",
+          "format" : "int32"
+        },
+        "sortBy" : {
+          "type" : "string"
+        },
+        "sortDirection" : {
+          "type" : "string"
+        },
+        "products" : {
+          "type" : "array",
+          "items" : {
+            "$ref" : "#/definitions/ProductHistoryInfoExternal"
+          }
+        }
+      }
+    },
+    "ProductResponse" : {
+      "properties" : {
+        "products" : {
+          "type" : "array",
+          "items" : {
+            "$ref" : "#/definitions/SimpleProductInfo"
+          }
+        }
+      }
+    },
+    "RecurringUpdateDetail" : {
+      "properties" : {
+        "recurringUpdateItemDetails" : {
+          "type" : "array",
+          "items" : {
+            "$ref" : "#/definitions/RecurringUpdateItemDetail"
+          }
+        },
+        "success" : {
+          "type" : "boolean",
+          "default" : false
+        },
+        "message" : {
+          "type" : "string"
+        }
+      }
+    },
+    "RecurringUpdateItemDetail" : {
+      "properties" : {
+        "recurringId" : {
+          "type" : "string"
+        },
+        "success" : {
+          "type" : "boolean",
+          "default" : false
+        },
+        "message" : {
+          "type" : "string"
+        }
+      }
+    },
+    "ResponseStatusDetail" : {
+      "properties" : {
+        "status" : {
+          "type" : "string"
+        },
+        "code" : {
+          "type" : "string"
+        },
+        "detail" : {
+          "type" : "string"
+        }
+      }
+    },
+    "SimpleProductInfo" : {
+      "properties" : {
+        "id" : {
+          "type" : "string"
+        },
+        "catalogId" : {
+          "type" : "string"
+        },
+        "sku" : {
+          "type" : "string"
+        },
+        "orderId" : {
+          "type" : "string"
+        },
+        "recurringId" : {
+          "type" : "string"
+        },
+        "purchaseType" : {
+          "type" : "string"
+        },
+        "interval" : {
+          "type" : "string"
+        },
+        "purchaseDate" : {
+          "type" : "string",
+          "format" : "date-time"
+        },
+        "quantity" : {
+          "type" : "integer",
+          "format" : "int32"
+        },
+        "transactionDate" : {
+          "type" : "string",
+          "format" : "date-time"
+        },
+        "billingStartDate" : {
+          "type" : "string",
+          "format" : "date-time"
+        },
+        "billingEndDate" : {
+          "type" : "string",
+          "format" : "date-time"
+        },
+        "durationStartDate" : {
+          "type" : "string",
+          "format" : "date-time"
+        },
+        "durationEndDate" : {
+          "type" : "string",
+          "format" : "date-time"
+        },
+        "version" : {
+          "type" : "string"
+        },
+        "status" : {
+          "type" : "string"
+        }
+      }
+    },
+    "TimeBasedQueryResponse" : {
+      "type" : "object"
+    },
+    "TimeBasedSubscriptionTransaction" : {
+      "properties" : {
+        "event" : {
+          "type" : "string"
+        },
+        "sku" : {
+          "type" : "string"
+        },
+        "transactionDate" : {
+          "type" : "integer",
+          "format" : "int64"
+        },
+        "billingStartDate" : {
+          "type" : "integer",
+          "format" : "int64"
+        },
+        "billingEndDate" : {
+          "type" : "integer",
+          "format" : "int64"
+        },
+        "orderId" : {
+          "type" : "string"
+        },
+        "reasonCode" : {
+          "type" : "string"
+        }
+      }
+    },
+    "TimeBasedSubscriptionTransactionDTO" : {
+      "properties" : {
+        "get_metaData" : {
+          "$ref" : "#/definitions/TimeBasedSubscriptionTransactionMetaData"
+        },
+        "accounts" : {
+          "type" : "array",
+          "items" : {
+            "$ref" : "#/definitions/TimeBasedSubscriptionTransactionsWithAccount"
+          }
+        }
+      }
+    },
+    "TimeBasedSubscriptionTransactionMetaData" : {
+      "properties" : {
+        "page" : {
+          "type" : "integer",
+          "format" : "int32"
+        },
+        "perPage" : {
+          "type" : "integer",
+          "format" : "int32"
+        },
+        "totalPages" : {
+          "type" : "integer",
+          "format" : "int64"
+        },
+        "totalOrders" : {
+          "type" : "integer",
+          "format" : "int64"
+        },
+        "transactionStartDate" : {
+          "type" : "integer",
+          "format" : "int64"
+        },
+        "transactionEndDate" : {
+          "type" : "integer",
+          "format" : "int64"
+        },
+        "maxAllowedPerPage" : {
+          "type" : "integer",
+          "format" : "int32"
+        },
+        "maxWindowInDays" : {
+          "type" : "integer",
+          "format" : "int32"
+        },
+        "productId" : {
+          "type" : "string"
+        }
+      }
+    },
+    "TimeBasedSubscriptionTransactionsWithAccount" : {
+      "properties" : {
+        "accountId" : {
+          "type" : "string"
+        },
+        "transactions" : {
+          "type" : "array",
+          "items" : {
+            "$ref" : "#/definitions/TimeBasedSubscriptionTransaction"
+          }
+        }
+      }
+    }
+  }
+}
